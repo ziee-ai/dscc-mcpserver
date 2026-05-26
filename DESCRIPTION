@@ -1,0 +1,44 @@
+Package: dscc.mcpserver
+Type: Package
+Title: MCP Server Exposing the DSCC Cancer Subtyping Method
+Version: 0.1.0
+Authors@R: c(
+    person("Khoi", "Nguyen", email = "khoindd2000@gmail.com", role = c("aut", "cre"))
+  )
+Description: Exposes the DSCC multi-omics cancer subtyping method (disease
+    subtyping via spectral clustering and community detection on consensus
+    networks) as Model Context Protocol tools over Streamable HTTP. Provides
+    tools to validate omics and survival inputs, run subtyping, evaluate the
+    prognostic value of the resulting subtypes (Cox and permutation log-rank
+    tests), and plot Kaplan-Meier and silhouette diagnostics. Built on the
+    mcpserver R framework. Each analysis runs in a fresh Rscript subprocess
+    for isolation; results are persisted to disk and served back as
+    resource_link URLs.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.3)
+Imports:
+    mcpserver (>= 0.1.0),
+    jsonlite,
+    httr2,
+    processx,
+    mirai,
+    nanonext,
+    promises,
+    openssl
+Suggests:
+    DBI (>= 1.2.0),
+    RSQLite (>= 2.3.0),
+    testthat (>= 3.0.0),
+    withr,
+    mockery,
+    magrittr,
+    matrixStats,
+    SNFtool,
+    igraph,
+    cluster,
+    survival,
+    RhpcBLASctl
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

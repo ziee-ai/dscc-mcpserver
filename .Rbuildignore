@@ -1,0 +1,16 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.github$
+^Dockerfile$
+^docker-compose.*\.yaml$
+^README\.md$
+^environment\.yml$
+^tests/protocol$
+^data-raw$
+^.*\.log$
+^results$
+^run-state$
+^mcpserver_.*\.tar\.gz$
+^.dockerignore$

@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+results/
+run-state/
+*.log
+mcpserver_*.tar.gz
