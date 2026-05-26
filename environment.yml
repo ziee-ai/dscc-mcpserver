@@ -1,13 +1,15 @@
 # Conda environment for running and testing dscc.mcpserver locally.
 #
 #   conda env create -f environment.yml
-#   conda run -n dscc-mcp R CMD INSTALL mcpserver_0.1.0.tar.gz
+#   # install the mcpserver framework (once on CRAN: install.packages("mcpserver");
+#   # until then from source: remotes::install_github("tinnlab/mcpserver-r"))
+#   conda run -n dscc-mcp Rscript -e 'install.packages("mcpserver", repos="https://cloud.r-project.org")'
 #   conda run -n dscc-mcp R CMD INSTALL .
 #   conda run -n dscc-mcp Rscript inst/run-http.R
 #
 # NEMO's nemo.num.clusters is vendored in inst/dscc, so NEMO itself is not
-# a dependency. mcpserver is installed from the bundled tarball (above),
-# not from conda.
+# a dependency. mcpserver is not bundled; install it from CRAN (or the
+# mcpserver-r source) as shown above.
 name: dscc-mcp
 channels:
   - conda-forge

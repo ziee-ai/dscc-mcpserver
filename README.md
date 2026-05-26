@@ -38,7 +38,9 @@ elicited — pass them exactly as provided by your platform.
 
 ```bash
 conda env create -f environment.yml          # creates the `dscc-mcp` env
-conda run -n dscc-mcp R CMD INSTALL mcpserver_0.1.0.tar.gz
+# install the mcpserver framework (once on CRAN: install.packages("mcpserver");
+# until then, from source: remotes::install_github("tinnlab/mcpserver-r"))
+conda run -n dscc-mcp Rscript -e 'install.packages("mcpserver", repos="https://cloud.r-project.org")'
 conda run -n dscc-mcp R CMD INSTALL .
 conda run -n dscc-mcp Rscript inst/run-http.R # serves /mcp on :9006, results on :9007
 ```
