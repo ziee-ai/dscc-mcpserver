@@ -1,0 +1,49 @@
+# Conda environment for running and testing dscc.mcpserver locally.
+#
+#   conda env create -f environment.yml
+#   # install the mcpserver framework (once on CRAN: install.packages("mcpserver");
+#   # until then from source: remotes::install_github("tinnlab/mcpserver-r"))
+#   conda run -n dscc-mcp Rscript -e 'install.packages("mcpserver", repos="https://cloud.r-project.org")'
+#   conda run -n dscc-mcp R CMD INSTALL .
+#   conda run -n dscc-mcp Rscript inst/run-http.R
+#
+# NEMO's nemo.num.clusters is vendored in inst/dscc, so NEMO itself is not
+# a dependency. mcpserver is not bundled; install it from CRAN (or the
+# mcpserver-r source) as shown above.
+name: dscc-mcp
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base>=4.3
+  # build toolchain (compiling any source-only R packages)
+  - make
+  - pkg-config
+  # MCP framework runtime deps
+  - r-r6
+  - r-jsonlite
+  - r-jsonvalidate
+  - r-httr2
+  - r-processx
+  - r-mirai
+  - r-nanonext
+  - r-promises
+  - r-later
+  - r-jose
+  - r-openssl
+  - r-dbi
+  - r-rsqlite
+  # DSCC scientific deps (nemo.num.clusters is vendored)
+  - r-magrittr
+  - r-matrixstats
+  - r-snftool
+  - r-igraph
+  - r-cluster
+  - r-survival
+  - r-rhpcblasctl
+  # test + build tooling
+  - r-testthat
+  - r-withr
+  - r-mockery
+  - r-devtools
+  - r-roxygen2

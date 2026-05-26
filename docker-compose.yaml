@@ -1,0 +1,21 @@
+services:
+  dscc-mcpserver:
+    build: .
+    image: dscc-mcpserver:latest
+    ports:
+      - "9006:9006"
+      - "9007:9007"
+    environment:
+      DSCC_PORT: "9006"
+      DSCC_STATIC_PORT: "9007"
+      DSCC_HOST: "0.0.0.0"
+      DSCC_STATIC_HOST: "0.0.0.0"
+      DSCC_DAEMONS: "6"
+      BASE_URL: "${BASE_URL:-http://localhost:9007}"
+      DSCC_LOG: "/var/log/dscc.log"
+    volumes:
+      - dscc-results:/var/lib/dscc/results
+    restart: unless-stopped
+
+volumes:
+  dscc-results:

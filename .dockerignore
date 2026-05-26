@@ -1,0 +1,7 @@
+.git
+.Rproj.user
+.Rhistory
+*.Rcheck/
+results/
+run-state/
+*.log
