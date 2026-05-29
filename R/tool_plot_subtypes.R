@@ -183,7 +183,7 @@ plot_prepare <- function(args) {
   run <- make_run_dir()
   base_name <- "plot_subtypes"
   png_path <- file.path(run$dir, "plot.png")
-  png_url  <- paste0(base_url(), "/results/", run$run_id, "/plot.png")
+  png_url  <- result_uri(run$run_id, "plot.png")
 
   job <- make_job_script(run$dir, base_name, "plot_subtypes", list(
     clusters_path = tmp_clusters,
