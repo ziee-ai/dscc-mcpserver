@@ -190,7 +190,7 @@ evaluate_prepare <- function(args) {
   run <- make_run_dir()
   base_name <- "evaluate_subtyping"
   eval_json <- file.path(run$dir, "evaluation.json")
-  eval_url  <- paste0(base_url(), "/results/", run$run_id, "/evaluation.json")
+  eval_url  <- result_uri(run$run_id, "evaluation.json")
 
   job <- make_job_script(run$dir, base_name, "evaluate_subtyping", list(
     clusters_path  = tmp_clusters,

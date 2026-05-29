@@ -45,6 +45,22 @@ conda run -n dscc-mcp R CMD INSTALL .
 conda run -n dscc-mcp Rscript inst/run-http.R # serves /mcp on :9006, results on :9007
 ```
 
+## Running over stdio
+
+For local clients that spawn the server as a subprocess, the server also speaks
+the MCP **stdio** transport (newline-delimited JSON-RPC on stdin/stdout). By
+default results are returned as local `file://` paths and no HTTP server is
+started; set `DSCC_RESULTS_MODE=http` to instead start the static results server
+and emit `http://` links.
+
+```bash
+conda run -n dscc-mcp Rscript -e 'dscc.mcpserver::start_stdio_server()'                # file:// results (local, no port)
+conda run -n dscc-mcp Rscript inst/run-stdio.R                                          # equivalent launcher
+conda run -n dscc-mcp Rscript -e 'dscc.mcpserver::start_stdio_server(results = "http")' # static server + http:// links
+```
+
+stdout is reserved for the protocol; all diagnostics go to stderr (or `DSCC_LOG`).
+
 ## Running with Docker
 
 ```bash
@@ -61,7 +77,8 @@ docker compose -f docker-compose.yaml -f docker-compose.auth.yaml up -d --build
 ## Environment variables
 
 `DSCC_PORT` (9006), `DSCC_STATIC_PORT` (9007), `DSCC_HOST`, `DSCC_STATIC_HOST`,
-`DSCC_DAEMONS` (4), `DSCC_RESULTS_DIR`, `BASE_URL`, `DSCC_LOG`. Auth:
+`DSCC_DAEMONS` (4), `DSCC_RESULTS_DIR`, `BASE_URL`, `DSCC_LOG`.
+stdio transport: `DSCC_RESULTS_MODE` (`file` default, or `http`). Auth:
 `DSCC_AUTH=on`, `MCPSERVER_ADMIN_TOKEN`, `DSCC_AUTH_DB`, `DSCC_AUTH_ISSUER`,
 `DSCC_AUTH_AUDIENCE` (`dscc`), `DSCC_AUTH_UI`.
 

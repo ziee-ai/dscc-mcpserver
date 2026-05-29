@@ -249,7 +249,7 @@ subtyping_prepare <- function(args) {
   clusters_csv <- file.path(run$dir, "clusters.csv")
   clusters_rds <- file.path(run$dir, "clusters.rds")
   cox_json     <- file.path(run$dir, "cox.json")
-  clusters_url <- paste0(base_url(), "/results/", run$run_id, "/clusters.csv")
+  clusters_url <- result_uri(run$run_id, "clusters.csv")
 
   job <- make_job_script(run$dir, base_name, "dscc_subtyping", list(
     omics_paths      = as.list(omics_paths),
