@@ -35,10 +35,16 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck
-          needs: check
+      - name: Install dependencies (mcpserver from the ziee-ai drat)
+        shell: Rscript {0}
+        run: |
+          r <- getOption("repos")
+          if (is.null(r) || all(r %in% c("@CRAN@", ""))) r <- c(CRAN = "https://cloud.r-project.org")
+          options(repos = c(zieeai = "https://ziee-ai.github.io/drat", r))
+          install.packages("pak", repos = sprintf(
+            "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+            .Platform$pkgType, R.Version()$os, R.Version()$arch))
+          pak::pkg_install(c("deps::.", "any::rcmdcheck"), dependencies = TRUE)
 
       - uses: r-lib/actions/check-r-package@v2
         with:
