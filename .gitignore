@@ -6,3 +6,6 @@
 results/
 run-state/
 *.log
+.mcpserver-as-key.pem
+**/.mcpserver-as-key.pem
+*.tar.gz

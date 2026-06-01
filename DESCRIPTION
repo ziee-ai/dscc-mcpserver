@@ -16,6 +16,9 @@ Description: Exposes the DSCC multi-omics cancer subtyping method (disease
     resource_link URLs.
 License: MIT + file LICENSE
 Encoding: UTF-8
+URL: https://github.com/ziee-ai/dscc-mcpserver
+BugReports: https://github.com/ziee-ai/dscc-mcpserver/issues
+Additional_repositories: https://ziee-ai.github.io/drat
 Depends:
     R (>= 4.3)
 Imports:

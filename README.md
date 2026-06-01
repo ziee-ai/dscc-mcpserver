@@ -1,8 +1,10 @@
 # dscc.mcpserver
 
+[![R-CMD-check](https://github.com/ziee-ai/dscc-mcpserver/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ziee-ai/dscc-mcpserver/actions/workflows/R-CMD-check.yml)
+
 An [MCP](https://modelcontextprotocol.io) server that exposes the **DSCC**
 multi-omics cancer subtyping method as tools over Streamable HTTP. Built on the
-[`mcpserver`](https://github.com/tinnlab/mcpserver-r) R framework, modeled on
+[`mcpserver`](https://github.com/ziee-ai/mcpserver-r) R framework, modeled on
 `rcpa-mcpserver`.
 
 DSCC ("Disease Subtyping using Spectral Clustering and Community detection from
@@ -11,6 +13,16 @@ networks and assigns each sample to a prognostic subtype. The core method
 (`runDSCC`) and the single NEMO helper it needs (`nemo.num.clusters`) are
 vendored under `inst/dscc/` with attribution; the package itself is a clean
 CRAN-style R package.
+
+## Install
+
+```r
+install.packages("dscc.mcpserver",
+                 repos = c("https://ziee-ai.github.io/drat", getOption("repos")))
+```
+
+This pulls `dscc.mcpserver` and the `mcpserver` framework from the
+[ziee-ai drat](https://ziee-ai.github.io/drat/); other dependencies come from CRAN.
 
 ## Tools
 
@@ -38,9 +50,8 @@ elicited — pass them exactly as provided by your platform.
 
 ```bash
 conda env create -f environment.yml          # creates the `dscc-mcp` env
-# install the mcpserver framework (once on CRAN: install.packages("mcpserver");
-# until then, from source: remotes::install_github("tinnlab/mcpserver-r"))
-conda run -n dscc-mcp Rscript -e 'install.packages("mcpserver", repos="https://cloud.r-project.org")'
+# install the mcpserver framework from the ziee-ai drat
+conda run -n dscc-mcp Rscript -e 'install.packages("mcpserver", repos=c("https://ziee-ai.github.io/drat", getOption("repos")))'
 conda run -n dscc-mcp R CMD INSTALL .
 conda run -n dscc-mcp Rscript inst/run-http.R # serves /mcp on :9006, results on :9007
 ```

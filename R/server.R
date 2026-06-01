@@ -21,7 +21,7 @@ build_dscc_server <- function() {
       "All *_uri parameters must be URLs from your platform - do not",
       "construct or modify them."),
     description = "DSCC subtyping workflows as MCP tools.",
-    website_url = "https://github.com/tinnlab"
+    website_url = "https://github.com/ziee-ai"
   )
   mcpserver::add_capability(srv, tool_validate_input_file())
   mcpserver::add_capability(srv, tool_run_dscc_subtyping())

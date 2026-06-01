@@ -33,13 +33,8 @@ RUN R -e "install.packages(c('processx','httr2','jsonlite','jsonvalidate','jose'
 RUN R -e "install.packages(c('nanonext','mirai'), repos='https://cloud.r-project.org')" \
  && R -e "stopifnot(packageVersion('nanonext') >= '1.9.0', packageVersion('mirai') >= '2.0.0')"
 
-# Install the mcpserver framework. Once it is published to CRAN this is all
-# that is needed. Until then it is not fetchable here (CRAN does not have it
-# yet, and the tinnlab/mcpserver-r source repo is private) - to build the
-# image before the CRAN release, install it from source first, e.g.:
-#   docker build --secret id=gh_pat,env=GITHUB_PAT ... and add a RUN step:
-#   remotes::install_github("tinnlab/mcpserver-r")
-RUN R -e "install.packages('mcpserver', repos='https://cloud.r-project.org')"
+# Install the mcpserver framework from the ziee-ai drat (public archive).
+RUN R -e "install.packages('mcpserver', repos=c('https://ziee-ai.github.io/drat', 'https://cloud.r-project.org'))"
 
 COPY . /tmp/dscc-mcpserver
 RUN R CMD INSTALL /tmp/dscc-mcpserver && rm -rf /tmp/dscc-mcpserver
