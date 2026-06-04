@@ -24,9 +24,11 @@ rscript_path <- function() .pkg_env$rscript
 result_uri <- function(run_id, filename,
                        mode = Sys.getenv("DSCC_RESULTS_MODE", unset = "http")) {
   if (identical(mode, "file")) {
-    paste0("file://",
-           normalizePath(file.path(results_dir(), run_id, filename),
-                         mustWork = FALSE))
+    # Normalize the (existing) results dir once — forward slashes on Windows
+    # and a consistent real path on macOS (/var -> /private/var) — then append
+    # run_id/filename so a not-yet-created file still yields a valid URI.
+    base <- normalizePath(results_dir(), mustWork = FALSE, winslash = "/")
+    paste0("file://", base, "/", run_id, "/", filename)
   } else {
     paste0(base_url(), "/results/", run_id, "/", filename)
   }

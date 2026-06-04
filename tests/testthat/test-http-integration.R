@@ -40,7 +40,7 @@ test_that("HTTP tools/call invokes validate_input_file end-to-end", {
     '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","clientInfo":{"name":"i","version":"0"},"capabilities":{}}}')
   body <- sprintf(
     '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"validate_input_file","arguments":{"file_uri":"file://%s","file_type":"omics_matrix"}}}',
-    normalizePath(omics))
+    normalizePath(omics, winslash = "/"))
   resp <- post(srv, body, timeout = 20)
   expect_equal(httr2::resp_status(resp), 200L)
   body <- parse_body(resp)

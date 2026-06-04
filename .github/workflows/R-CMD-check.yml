@@ -19,12 +19,16 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: ubuntu-latest,  r: 'release'}
-          - {os: ubuntu-latest,  r: 'devel'}
-          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: ubuntu-latest,     r: 'release'}
+          - {os: ubuntu-latest,     r: 'devel'}
+          - {os: ubuntu-latest,     r: 'oldrel-1'}
+          - {os: ubuntu-24.04-arm,  r: 'release'}   # Linux arm64 (deps build from source; no P3M binaries)
+          - {os: macos-latest,      r: 'release'}   # macOS arm64 (Apple Silicon)
+          - {os: windows-latest,    r: 'release'}   # Windows x86_64
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      _R_CHECK_FORCE_SUGGESTS_: false   # heavy analysis Suggests (SNFtool/igraph/...) are optional
     steps:
       - uses: actions/checkout@v5
 
@@ -33,16 +37,41 @@ jobs:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - name: Install dependencies (mcpserver from the ziee-ai drat)
+      - name: Add the ziee-ai drat to repos (for the mcpserver dependency)
         shell: Rscript {0}
         run: |
-          r <- getOption("repos")
-          if (is.null(r) || all(r %in% c("@CRAN@", ""))) r <- c(CRAN = "https://cloud.r-project.org")
-          options(repos = c(zieeai = "https://ziee-ai.github.io/drat", r))
-          install.packages("pak", repos = sprintf(
-            "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
-            .Platform$pkgType, R.Version()$os, R.Version()$arch))
-          pak::pkg_install(c("deps::.", "any::rcmdcheck"), dependencies = TRUE)
+          p <- file.path(Sys.getenv("HOME"), ".Rprofile")
+          cat('local({r <- getOption("repos"); r["ZIEEAI"] <- "https://ziee-ai.github.io/drat"; options(repos = r)})\n',
+              file = p, append = TRUE)
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: |
+            any::rcmdcheck
+            any::testthat
+            any::withr
+            any::mockery
+            any::DBI
+            any::RSQLite
+          needs: check
+
+      # mcpserver ships from the drat; force a fresh install so the current build
+      # (incl. the Windows stdio daemon fix) is always what's tested, regardless of
+      # any cached library. The guard fails fast if a stale build slips through.
+      - name: Reinstall mcpserver fresh from the ziee-ai drat
+        shell: Rscript {0}
+        run: |
+          install.packages("mcpserver",
+                           repos = "https://ziee-ai.github.io/drat",
+                           type = "source", dependencies = FALSE)
+          has_fix <- grepl("0.05",
+                           paste(deparse(body(mcpserver::serve_io)), collapse = " "),
+                           fixed = TRUE)
+          cat("mcpserver", as.character(packageVersion("mcpserver")),
+              "| stdio fix present:", has_fix, "\n")
+          if (!has_fix)
+            stop("installed mcpserver lacks the stdio Windows fix (stale drat/cache?)")
 
       - uses: r-lib/actions/check-r-package@v2
         with:
